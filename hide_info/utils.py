@@ -1,3 +1,6 @@
+import struct
+
+
 def serialization(data: bytes) -> bytes:
     """
     功能：输入数据，输出其封装后的 bytes 类型，其封装以下内容：
@@ -12,3 +15,17 @@ def deserialization(serialized_data: bytes):
     与 serialization 相反的操作
     """
     return serialized_data[4:4 + int.from_bytes(serialized_data[:4], byteorder="big")]
+
+
+def bytes2bin(bytes1: bytes) -> str:
+    """
+    把 bytes 转化为 "10110" 这种形式的二进制
+    """
+    return ''.join([format(i, '08b') for i in bytes1])
+
+
+def bin2bytes(bin1: str) -> bytes:
+    """
+    bytes2bin 的相反操作
+    """
+    return b''.join([struct.pack('>B', int(bin1[i * 8:i * 8 + 8], base=2)) for i in range(len(bin1) // 8)])
