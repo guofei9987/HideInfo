@@ -23,8 +23,6 @@ class EchoWatermark:
         self.delay01, self.delay00 = 120, 130
 
     def embed(self, origin_filename, wm_bits, embed_filename):
-        pwd = self.pwd
-        algo_type = self.algo_type
         frame_len = self.frame_len
         echo_amplitude = self.echo_amplitude
         overlap = self.overlap
@@ -60,7 +58,7 @@ class EchoWatermark:
         wm_repeat = np.repeat(wm_bits, n_repeat)
 
         # 生成密钥
-        np.random.seed(pwd)
+        np.random.seed(self.pwd)
         secret_key = np.random.randint(2, size=int(len_wm_bits))
         secret_key_extended = np.repeat(secret_key, n_repeat)
 
@@ -84,9 +82,9 @@ class EchoWatermark:
             echo_forward = echo_amplitude \
                            * np.concatenate((frame[delay:frame_len], np.zeros(delay)))
 
-            if algo_type == 1:
+            if self.algo_type == 1:
                 echoed_frame = frame + echo_positive
-            elif algo_type == 2:
+            elif self.algo_type == 2:
                 echoed_frame = frame + echo_positive + echo_negative
             else:  # algo_type == 3
                 echoed_frame = frame + echo_positive + echo_forward
@@ -100,16 +98,11 @@ class EchoWatermark:
             prev1 = echoed_frame
             pointer += frame_shift
 
-        echoed_signal = np.concatenate(
-            (echoed_signal, ori_signal[len(echoed_signal): signal_len]))
-
+        echoed_signal = np.concatenate((echoed_signal, ori_signal[len(echoed_signal):])).astype(np.int16)
         # 将保存为wav格式
-        echoed_signal = echoed_signal.astype(np.int16)
         wavfile.write(embed_filename, sr, echoed_signal)
 
     def extract(self, embed_filename, len_wm_bits):
-        pwd = self.pwd
-        algo_type = self.algo_type
         frame_len = self.frame_len
         overlap = self.overlap
         neg_delay = self.neg_delay
@@ -134,7 +127,7 @@ class EchoWatermark:
                 f"可以嵌入的总比特数为: {embed_nbit_}，水印长度为{len_wm_bits},重复嵌入 {n_repeat} 次, 实际嵌入{embed_nbit}")
 
         # 加载密钥
-        np.random.seed(pwd)
+        np.random.seed(self.pwd)
         secret_key = np.random.randint(2, size=int(len_wm_bits))
         secret_key = np.repeat(secret_key, n_repeat)
 
@@ -150,10 +143,10 @@ class EchoWatermark:
             else:
                 delay0, delay1 = delay00, delay01
 
-            if algo_type == 1:
+            if self.algo_type == 1:
                 if ceps1[delay1] > ceps1[delay0]:
                     detected_bit1[i] = 1
-            elif algo_type == 2:
+            elif self.algo_type == 2:
                 if (ceps1[delay1] - ceps1[delay1 + neg_delay]) > \
                         (ceps1[delay0] - ceps1[delay0 + neg_delay]):
                     detected_bit1[i] = 1
