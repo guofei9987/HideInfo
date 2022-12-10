@@ -12,9 +12,8 @@ class EchoWatermark:
 
         self.frame_len = 2048  # 帧长度
         self.echo_amplitude = 0.2  # 回声幅度
-        self.OVERLAP = 0.5  # 帧分析的重叠率
+        self.overlap = 0.5  # 帧分析的重叠率
         self.NEGATIVE_DELAY = 4  # negative delay, for negative echo
-        self.LOG_FLOOR = 0.00001
 
         # 回声参数
         # keyword = 1
@@ -27,19 +26,18 @@ class EchoWatermark:
         algo_type = self.algo_type
         frame_len = self.frame_len
         echo_amplitude = self.echo_amplitude
-        OVERLAP = self.OVERLAP
+        overlap = self.overlap
         NEGATIVE_DELAY = self.NEGATIVE_DELAY
-        LOG_FLOOR = self.LOG_FLOOR
         delay11, delay10, delay01, delay00 = self.delay11, self.delay10, self.delay01, self.delay00
 
         sr, host_signal = wavfile.read(origin_filename)
         signal_len = len(host_signal)
 
         # 帧的移动量
-        frame_shift = int(frame_len * (1 - OVERLAP))
+        frame_shift = int(frame_len * (1 - overlap))
 
         # 和相邻帧的重叠长度
-        overlap_length = int(frame_len * OVERLAP)
+        overlap_length = int(frame_len * overlap)
 
         # 可嵌入总比特数
         embed_nbit_ = (signal_len - overlap_length) // frame_shift
@@ -120,18 +118,17 @@ class EchoWatermark:
         pwd = self.pwd
         algo_type = self.algo_type
         frame_len = self.frame_len
-        echo_amplitude = self.echo_amplitude
-        OVERLAP = self.OVERLAP
+        overlap = self.overlap
         NEGATIVE_DELAY = self.NEGATIVE_DELAY
-        LOG_FLOOR = self.LOG_FLOOR
         delay11, delay10, delay01, delay00 = self.delay11, self.delay10, self.delay01, self.delay00
+        log_floor = 0.00001  # 取对数时的最小值
 
         # 打开已嵌入水印的音频文件
         _, eval_signal1 = wavfile.read(embed_filename)
         signal_len = len(eval_signal1)
 
-        frame_shift = int(frame_len * (1 - OVERLAP))
-        embed_nbit_ = (signal_len - int(frame_len * OVERLAP)) // frame_shift
+        frame_shift = int(frame_len * (1 - overlap))
+        embed_nbit_ = (signal_len - int(frame_len * overlap)) // frame_shift
 
         # 重复次数
         n_repeat = embed_nbit_ // len_wm_bits
@@ -153,7 +150,7 @@ class EchoWatermark:
         for i in range(embed_nbit):
             wmarked_frame1 = eval_signal1[pointer: pointer + frame_len]
             ceps1 = np.fft.ifft(
-                np.log(np.square(np.fft.fft(wmarked_frame1)) + LOG_FLOOR)).real
+                np.log(np.square(np.fft.fft(wmarked_frame1)) + log_floor)).real
 
             if secret_key[i] == 1:
                 if algo_type == 1:
