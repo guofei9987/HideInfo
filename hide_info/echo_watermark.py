@@ -29,7 +29,9 @@ class EchoWatermark:
         echo_amplitude = self.echo_amplitude
         overlap = self.overlap
         neg_delay = self.neg_delay
+
         delay11, delay10, delay01, delay00 = self.delay11, self.delay10, self.delay01, self.delay00
+        delay_matrix = [[delay00, delay01], [delay10, delay11]]
 
         sr, host_signal = wavfile.read(origin_filename)
         signal_len = len(host_signal)
@@ -66,19 +68,11 @@ class EchoWatermark:
         pointer = 0
         echoed_signal1 = np.zeros((frame_shift * embed_nbit))
         prev1 = np.zeros(frame_len)
+
         for i in range(embed_nbit):
             frame = host_signal[pointer: (pointer + frame_len)]
 
-            if secret_key_extended[i] == 1:
-                if wm_repeat[i] == 1:
-                    delay = delay11
-                else:
-                    delay = delay10
-            else:
-                if wm_repeat[i] == 1:
-                    delay = delay01
-                else:
-                    delay = delay00
+            delay = delay_matrix[secret_key_extended[i]][wm_repeat[i]]
 
             echo_positive = echo_amplitude \
                             * np.concatenate(
@@ -105,7 +99,7 @@ class EchoWatermark:
                                 echoed_frame1[overlap_length:frame_shift]))
 
             prev1 = echoed_frame1
-            pointer = pointer + frame_shift
+            pointer += frame_shift
 
         echoed_signal1 = np.concatenate(
             (echoed_signal1, host_signal[len(echoed_signal1): signal_len]))
@@ -153,57 +147,37 @@ class EchoWatermark:
                 np.log(np.square(np.fft.fft(wmarked_frame1)) + log_floor)).real
 
             if secret_key[i] == 1:
-                if algo_type == 1:
-                    if ceps1[delay11] > ceps1[delay10]:
-                        detected_bit1[i] = 1
-                    else:
-                        detected_bit1[i] = 0
-                elif algo_type == 2:
-                    if (ceps1[delay11] - ceps1[delay11 + neg_delay]) > \
-                            (ceps1[delay10] - ceps1[delay10 + neg_delay]):
-                        detected_bit1[i] = 1
-                    else:
-                        detected_bit1[i] = 0
-                else:  # algo_type == 3
-                    if ceps1[delay11] > ceps1[delay10]:
-                        detected_bit1[i] = 1
-                    else:
-                        detected_bit1[i] = 0
-
+                delay0, delay1 = delay10, delay11
             else:
-                if algo_type == 1:
-                    if ceps1[delay01] > ceps1[delay00]:
-                        detected_bit1[i] = 1
-                    else:
-                        detected_bit1[i] = 0
-                elif algo_type == 2:
-                    if (ceps1[delay01] - ceps1[delay01 + neg_delay]) > \
-                            (ceps1[delay00] - ceps1[delay00 + neg_delay]):
-                        detected_bit1[i] = 1
-                    else:
-                        detected_bit1[i] = 0
-                else:
-                    if ceps1[delay01] > ceps1[delay00]:
-                        detected_bit1[i] = 1
-                    else:
-                        detected_bit1[i] = 0
+                delay0, delay1 = delay00, delay01
+
+            if algo_type == 1:
+                if ceps1[delay1] > ceps1[delay0]:
+                    detected_bit1[i] = 1
+            elif algo_type == 2:
+                if (ceps1[delay1] - ceps1[delay1 + neg_delay]) > \
+                        (ceps1[delay0] - ceps1[delay0 + neg_delay]):
+                    detected_bit1[i] = 1
+            else:  # algo_type == 3
+                if ceps1[delay1] > ceps1[delay0]:
+                    detected_bit1[i] = 1
 
             pointer = pointer + frame_shift
 
         count = 0
-        wmark_recovered1 = np.zeros(len_wm_bits)
+        wm_extract = np.zeros(len_wm_bits)
 
         for i in range(len_wm_bits):
             # 汇总比特值（按平均值）
             ave = np.sum(detected_bit1[count:count + n_repeat]) / n_repeat
             if ave >= 0.5:
-                wmark_recovered1[i] = 1
+                wm_extract[i] = 1
             else:
-                wmark_recovered1[i] = 0
+                wm_extract[i] = 0
 
             count = count + n_repeat
 
-        return wmark_recovered1
+        return wm_extract
 
 
 def get_error_rate(wm_extract, wm_bits):
