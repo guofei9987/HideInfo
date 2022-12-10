@@ -2,6 +2,7 @@
 import numpy as np
 from scipy.io import wavfile
 from scipy.signal import windows
+from numpy.fft import ifft
 
 
 class EchoWatermark:
@@ -13,7 +14,7 @@ class EchoWatermark:
         self.frame_len = 2048  # 帧长度
         self.echo_amplitude = 0.2  # 回声幅度
         self.overlap = 0.5  # 帧分析的重叠率
-        self.NEGATIVE_DELAY = 4  # negative delay, for negative echo
+        self.neg_delay = 4  # negative delay, for negative echo
 
         # 回声参数
         # keyword = 1
@@ -27,7 +28,7 @@ class EchoWatermark:
         frame_len = self.frame_len
         echo_amplitude = self.echo_amplitude
         overlap = self.overlap
-        NEGATIVE_DELAY = self.NEGATIVE_DELAY
+        neg_delay = self.neg_delay
         delay11, delay10, delay01, delay00 = self.delay11, self.delay10, self.delay01, self.delay00
 
         sr, host_signal = wavfile.read(origin_filename)
@@ -64,8 +65,7 @@ class EchoWatermark:
 
         pointer = 0
         echoed_signal1 = np.zeros((frame_shift * embed_nbit))
-        prev1 = np.zeros((frame_len))
-        de = NEGATIVE_DELAY  #
+        prev1 = np.zeros(frame_len)
         for i in range(embed_nbit):
             frame = host_signal[pointer: (pointer + frame_len)]
 
@@ -81,12 +81,12 @@ class EchoWatermark:
                     delay = delay00
 
             echo_positive = echo_amplitude \
-                            * np.concatenate((np.zeros(delay),
-                                              frame[0:frame_len - delay]))
+                            * np.concatenate(
+                (np.zeros(delay), frame[0:frame_len - delay]))
 
             echo_negative = - echo_amplitude \
-                            * np.concatenate((np.zeros(delay + de),
-                                              frame[0:frame_len - delay - de]))
+                            * np.concatenate((np.zeros(delay + neg_delay),
+                                              frame[0:frame_len - delay - neg_delay]))
 
             echo_forward = echo_amplitude \
                            * np.concatenate((frame[delay:frame_len], np.zeros(delay)))
@@ -119,7 +119,7 @@ class EchoWatermark:
         algo_type = self.algo_type
         frame_len = self.frame_len
         overlap = self.overlap
-        NEGATIVE_DELAY = self.NEGATIVE_DELAY
+        neg_delay = self.neg_delay
         delay11, delay10, delay01, delay00 = self.delay11, self.delay10, self.delay01, self.delay00
         log_floor = 0.00001  # 取对数时的最小值
 
@@ -149,7 +149,7 @@ class EchoWatermark:
         detected_bit1 = np.zeros(embed_nbit)
         for i in range(embed_nbit):
             wmarked_frame1 = eval_signal1[pointer: pointer + frame_len]
-            ceps1 = np.fft.ifft(
+            ceps1 = ifft(
                 np.log(np.square(np.fft.fft(wmarked_frame1)) + log_floor)).real
 
             if secret_key[i] == 1:
@@ -159,8 +159,8 @@ class EchoWatermark:
                     else:
                         detected_bit1[i] = 0
                 elif algo_type == 2:
-                    if (ceps1[delay11] - ceps1[delay11 + NEGATIVE_DELAY]) > \
-                            (ceps1[delay10] - ceps1[delay10 + NEGATIVE_DELAY]):
+                    if (ceps1[delay11] - ceps1[delay11 + neg_delay]) > \
+                            (ceps1[delay10] - ceps1[delay10 + neg_delay]):
                         detected_bit1[i] = 1
                     else:
                         detected_bit1[i] = 0
@@ -177,8 +177,8 @@ class EchoWatermark:
                     else:
                         detected_bit1[i] = 0
                 elif algo_type == 2:
-                    if (ceps1[delay01] - ceps1[delay01 + NEGATIVE_DELAY]) > \
-                            (ceps1[delay00] - ceps1[delay00 + NEGATIVE_DELAY]):
+                    if (ceps1[delay01] - ceps1[delay01 + neg_delay]) > \
+                            (ceps1[delay00] - ceps1[delay00 + neg_delay]):
                         detected_bit1[i] = 1
                     else:
                         detected_bit1[i] = 0
@@ -206,18 +206,18 @@ class EchoWatermark:
         return wmark_recovered1
 
 
-def get_error_rate(wmark_recovered, wm_bits):
+def get_error_rate(wm_extract, wm_bits):
     # 计算错误率
     len_wm_bits = len(wm_bits)
-    error_num = np.sum(np.abs(wmark_recovered - wm_bits))
+    error_num = np.sum(np.abs(wm_extract - wm_bits))
     error_rate = error_num / len_wm_bits
     print(f'bit error rate = {error_rate:.2%} ({error_num} / {len_wm_bits})')
     return error_rate
 
 
-def get_snr(wav_with_wm, orig_file):
+def get_snr(file_with_wm, orig_file):
     sr, host_signal = wavfile.read(orig_file)
-    _, eval_signal1 = wavfile.read(wav_with_wm)
+    _, eval_signal1 = wavfile.read(file_with_wm)
 
     SNR = 10 * np.log10(
         np.sum(np.square(host_signal.astype(np.float32)))
