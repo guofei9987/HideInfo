@@ -15,6 +15,7 @@ lsb.file_lsb_encode(filename='要隐藏的文件.zip', img_filename='图片.png'
 
 text_encode = lsb.file_lsb_decode('lsb解出的文件.zip', img_filename='LSB算法嵌入后的图片.png')
 
+# 要隐藏的文件和解出的文件一模一样
 import hashlib
 
 with open('要隐藏的文件.zip', 'rb') as f1, open('lsb解出的文件.zip', 'rb') as f2:

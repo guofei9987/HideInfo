@@ -16,7 +16,7 @@ file_as_img.file2img(filename='要隐藏的文件.zip', img_filename='文件转�
 # 把图片再转会文件
 file_as_img.img2file(filename='解出来的文件.zip', img_filename='文件转到图片.png')
 
-# 验证两个文件是一模一样的
+# 要隐藏的文件和解出的文件一模一样
 import hashlib
 
 with open('要隐藏的文件.zip', 'rb') as f1, open('解出来的文件.zip', 'rb') as f2:
