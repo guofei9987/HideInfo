@@ -30,7 +30,12 @@ CryptoCloak: Advanced Info Hiding Library
 
 ## 幻影坦克
 
+功能：把两个图片合并，使其在黑色背景下显示图片A，在白色背景下显示图片B
 
+说明
+- 目前只支持黑白图片
+- 一般情况下，手机/浏览器的预览和点击大图分别使黑色背景和白色背景，因此有"预览和点击是两张不通的图"的效果
+- 未来：支持彩色图片
 
 例子：[example/example_mirage_tank.py](example/example_mirage_tank.py)
 
