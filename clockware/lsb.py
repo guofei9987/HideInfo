@@ -33,10 +33,9 @@ def lsb_decode(img_filename: str) -> bytes:
     lst = []
     for i in range(32):
         x, y, c = (i // 3) // width, (i // 3) % width, i % 3
-        tmp = img[x, y, c]
-        lst.append(tmp & 0b00000001)
+        lst.append(img[x, y, c] & 0b00000001)
 
-    # 实际隐藏的数据长度（二进制位数）
+    # 得到实际隐藏的数据长度（二进制位数）
     len_data = int(''.join(str(i) for i in lst), base=2) * 8
     lst = []
     for i in range(len_data + 32):
