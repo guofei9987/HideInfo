@@ -4,7 +4,7 @@ from PIL import Image
 from .clockware_utils import serialization, deserialization
 
 
-def bytes2img(bytes_data: bytes, img_filename: str):
+def encode(bytes_data: bytes, img_filename: str):
     data_to_write = serialization(bytes_data)
 
     len_data = len(data_to_write)
@@ -16,7 +16,7 @@ def bytes2img(bytes_data: bytes, img_filename: str):
     Image.fromarray(data_img).save(img_filename)
 
 
-def img2bytes(img_filename: str) -> bytes:
+def decode(img_filename: str) -> bytes:
     img = Image.open(img_filename)
 
     width, height = img.size
@@ -30,11 +30,11 @@ def img2bytes(img_filename: str) -> bytes:
     return deserialization(bytes(lst))
 
 
-def file2img(filename: str, img_filename: str):
+def file_encode(filename: str, img_filename: str):
     with open(file=filename, mode='rb') as f:
-        bytes2img(bytes_data=f.read(), img_filename=img_filename)
+        encode(bytes_data=f.read(), img_filename=img_filename)
 
 
-def img2file(filename: str, img_filename: str):
+def file_decode(filename: str, img_filename: str):
     with open(file=filename, mode='wb') as f:
-        f.write(img2bytes(img_filename=img_filename))
+        f.write(decode(img_filename=img_filename))

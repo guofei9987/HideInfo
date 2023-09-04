@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 
 
-def lsb_encode(bytes_data: bytes, img_filename: str, img_filename_new: str):
+def encode(bytes_data: bytes, img_filename: str, img_filename_new: str):
     data_to_write = serialization(bytes_data)
     img = np.array(Image.open(img_filename))
     height, width = img.shape[:2]
@@ -25,7 +25,7 @@ def lsb_encode(bytes_data: bytes, img_filename: str, img_filename_new: str):
     return img
 
 
-def lsb_decode(img_filename: str) -> bytes:
+def decode(img_filename: str) -> bytes:
     img = np.array(Image.open(img_filename))
     height, width = img.shape[:2]
 
@@ -49,11 +49,11 @@ def lsb_decode(img_filename: str) -> bytes:
     return deserialization(s_out)
 
 
-def file_lsb_encode(filename: str, img_filename: str, img_filename_new: str):
+def file_encode(filename: str, img_filename: str, img_filename_new: str):
     with open(file=filename, mode='rb') as f:
-        lsb_encode(bytes_data=f.read(), img_filename=img_filename, img_filename_new=img_filename_new)
+        encode(bytes_data=f.read(), img_filename=img_filename, img_filename_new=img_filename_new)
 
 
-def file_lsb_decode(filename: str, img_filename: str):
+def file_decode(filename: str, img_filename: str):
     with open(file=filename, mode='wb') as f:
-        f.write(lsb_decode(img_filename=img_filename))
+        f.write(decode(img_filename=img_filename))
