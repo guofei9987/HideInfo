@@ -4,7 +4,7 @@ CryptoCloak: Advanced Info Hiding Library
 一些主流（但是原理简单）的信息隐藏方法。
 
 
-## hide_as_img:文件转图
+## hide_as_img:转物为图
 
 功能：文件/文本/bytes 类数据，转换为图片  
 原理：图片1个通道上的1个像素，可以存放 0-255 的数字，也就是一个字节。因此可以用来存放数据。  
@@ -25,7 +25,7 @@ CryptoCloak: Advanced Info Hiding Library
 - 使用前4个字节存放数据的大小
 - 使用位运算，提高一定的性能
 - LSB算法对压缩、转格式等攻击脆弱
-- 例子：[example_hide_in_img.py](example%2Fexample_hide_in_img.py)
+- 例子：[example_hide_in_img.py](example/example_hide_in_img.py)
 
 
 ## 幻影坦克
@@ -43,7 +43,17 @@ CryptoCloak: Advanced Info Hiding Library
 功能：把一段信息（文件/文本/bytes），藏进一个音乐文件中
 
 例子：
--[example_hide_in_music.py](example%2Fexample_hide_in_music.py)
+-[example_hide_in_music.py](example/example_hide_in_music.py)
+
+## 转物为音
+
+功能：把一段信息（文件/文本/bytes），转为声音
+
+说明
+- 选择 16 种音表示四进制
+- 每个音持续 0.05 秒，因此每秒对应 10 字节
+- 例子：[hide_as_music.py](clockware/hide_as_music.py)
+
 
 ## 其他算法
 
