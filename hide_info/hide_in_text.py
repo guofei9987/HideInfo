@@ -33,3 +33,15 @@ def decode(text_new: str) -> bytes:
 
     return deserialization(s_out)
 
+
+def file_encode(filename: str, text_filename: str, text_filename_new: str):
+    with open(file=filename, mode='rb') as f1 \
+            , open(file=text_filename, mode='r') as f2 \
+            , open(file=text_filename_new, mode='w') as f3:
+        text_new = encode(bytes_data=f1.read(), text=f2.read())
+        f3.write(text_new)
+
+
+def file_decode(filename: str, text_filename: str):
+    with open(file=filename, mode='wb') as f, open(file=text_filename, mode='r') as f2:
+        f.write(decode(text_new=f2.read()))
