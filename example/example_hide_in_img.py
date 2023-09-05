@@ -1,4 +1,4 @@
-from clockware import hide_in_img
+from hide_info import hide_in_img
 
 text = "待转变为图片的文本，下面的代码中，会使用LSB算法把这段文本以二进制形式嵌入到一个图片中"
 

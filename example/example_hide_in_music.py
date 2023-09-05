@@ -1,4 +1,4 @@
-from clockware import hide_in_music
+from hide_info import hide_in_music
 
 text = "待嵌入到音乐文件的文本，下面的代码中，会把这段文本以二进制形式隐藏到一个音乐文件中"
 

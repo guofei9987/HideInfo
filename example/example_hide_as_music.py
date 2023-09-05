@@ -1,4 +1,4 @@
-from clockware import hide_as_music
+from hide_info import hide_as_music
 
 bytes_data = '下面的代码中，会把这段文本以声音文件的形式存放起来'.encode('utf-8')
 

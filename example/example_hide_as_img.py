@@ -1,4 +1,4 @@
-from clockware import hide_as_img
+from hide_info import hide_as_img
 
 text = "待转变为图片的文本，下面的代码中，会把这段文本以图片形式存放起来"
 
