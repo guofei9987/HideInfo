@@ -1,7 +1,7 @@
 import math
 import numpy as np
 from PIL import Image
-from .clockware_utils import serialization, deserialization
+from .utils import serialization, deserialization
 
 
 def encode(bytes_data: bytes, img_filename: str):

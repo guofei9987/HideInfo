@@ -1,4 +1,4 @@
-from hide_info.clockware_utils import serialization, deserialization
+from .utils import serialization, deserialization
 import struct
 
 

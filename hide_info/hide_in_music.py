@@ -1,5 +1,5 @@
 import wave
-from clockware.clockware_utils import serialization, deserialization
+from utils import serialization, deserialization
 
 
 def encode(bytes_data: bytes, music_filename: str, music_filename_new: str):

@@ -1,5 +1,5 @@
 import struct
-from clockware.clockware_utils import serialization, deserialization
+from .utils import serialization, deserialization
 import numpy as np
 from PIL import Image
 
