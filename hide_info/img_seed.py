@@ -1,3 +1,12 @@
+"""
+# Linux:
+cat 1.jpg 1.zip > output.jpg
+
+# Windows:
+copy/b 1.jpg+1.zip=output.jpg
+"""
+
+
 def encode(bytes_data: bytes, img_filename: str, img_filename_new: str):
     assert img_filename.endswith('.jpg'), "图种目前只支持 jpg 图片"
     assert img_filename_new.endswith('.jpg'), "图种目前只支持 jpg 图片"
