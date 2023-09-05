@@ -12,6 +12,7 @@ Info Hiding Library
 | EXIF | 把一段信息放到图片的EXIF中   |
 | 藏物于音 | 把数据隐藏在音频文件中       |
 | 转物为音 | 把数据以音频的形式存放       |
+| 藏物于文 | 把数据隐藏在文本中 |
 
 
 安装
@@ -82,7 +83,19 @@ pip install HideInfo
 - 用 16 种音表示四进制。每个音持续 0.05 秒，因此每秒对应 10 字节。
 - 例子：[hide_as_music.py](clockware/hide_as_music.py)
 
+## hide_in_text：藏物于文
+
+功能：把一段信息（文件/文本/bytes），藏进一段文本中
+
+说明
+- 实测在苹果设备 Macbook、IOS 上，隐藏前后的文本看不出区别。但是 Windows 和某些安卓系统上，会有空格
+- 例子：[hide_in_text.py](clockware/hide_in_text.py)
+
+
+
+
 ## 其他算法
 
 缩放藏图：提前计算用近邻法缩放时使用的时哪些像素点，然后把这些像素点变成另一个图。
 
+为什么没有"转物为文"？想要把字节码转为文本，可以借助 base64 或者 `bytes.hex()` 等多种方法。
