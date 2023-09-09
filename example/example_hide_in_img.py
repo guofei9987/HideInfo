@@ -10,9 +10,9 @@ print(text_encode.decode('utf-8'))
 
 # %% 或者把一个文件嵌入到图片中
 
-
+# 把文件隐藏到图片中
 hide_in_img.file_encode(filename='要隐藏的文件.zip', img_filename='图片.png', img_filename_new='藏物于图.png')
-
+# 从图片中提取文件
 text_encode = hide_in_img.file_decode('藏物于图-解出的文件.zip', img_filename='藏物于图.png')
 
 # 要隐藏的文件和解出的文件一模一样

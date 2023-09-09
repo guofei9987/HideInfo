@@ -44,6 +44,15 @@ pip install HideInfo
 - 可以存放文件、文本、bytes 类数据，把它转化为一张图片
 - 代码：[example_hide_as_img.py](example/example_hide_as_img.py)
 
+```python
+from hide_info import hide_as_img
+
+# 文件转为图片并存下来
+hide_as_img.file_encode(filename='要隐藏的文件.zip', img_filename='化物为图.png')
+# 把图片再转会文件
+hide_as_img.file_decode(filename='化物为图-解出来的文件.zip', img_filename='化物为图.png')
+```
+
 ## hide_in_img：藏物于图
 
 功能：文件/文本/bytes 类数据，藏进一个 PNG 图片中，并且用肉眼无法看出区别
@@ -55,6 +64,15 @@ pip install HideInfo
 - 使用位运算，提高一定的性能
 - LSB算法对压缩、转格式等攻击脆弱
 - 例子：[example_hide_in_img.py](example/example_hide_in_img.py)
+
+```python
+from hide_info import hide_in_img
+
+# 把文件隐藏到图片中
+hide_in_img.file_encode(filename='要隐藏的文件.zip', img_filename='图片.png', img_filename_new='藏物于图.png')
+# 从图片中提取文件
+text_encode = hide_in_img.file_decode('藏物于图-解出的文件.zip', img_filename='藏物于图.png')
+```
 
 
 ## img_seed:图种
@@ -76,13 +94,32 @@ pip install HideInfo
 例子：
 - [example_hide_in_music.py](example/example_hide_in_music.py)
 
+```python
+from hide_info import hide_in_music
+
+# 把文件隐藏到某个音乐中
+hide_in_music.file_encode(filename='要隐藏的文件.zip', music_filename="音乐.wav", music_filename_new="藏物于音.wav")
+# 从音乐中提取文件
+hide_in_music.file_decode(filename="藏物于音-解出的文件.zip", music_filename="藏物于音.wav")
+```
+
 ## hide_as_music：转物为音
 
 功能：把一段信息（文件/文本/bytes），转为声音
 
 说明
 - 用 16 种音表示四进制。每个音持续 0.05 秒，因此每秒对应 10 字节。
-- 例子：[hide_as_music.py](clockware/hide_as_music.py)
+- 例子：[hide_as_music.py](example/example_hide_as_music.py)
+
+```python
+from hide_info import hide_as_music
+
+# 文件转为声音并存下来
+hide_as_music.file_encode(filename='要隐藏的文件2.zip', wav_filename='化物为音.wav')
+# 把声音再转回文件
+hide_as_music.file_decode(filename='化物为音-解出来的文件.zip', wav_filename='化物为音.wav')
+
+```
 
 ## hide_in_text：藏物于文
 
@@ -90,7 +127,16 @@ pip install HideInfo
 
 说明
 - 实测在苹果设备 Macbook、IOS 上，隐藏前后的文本看不出区别。但是 Windows 和某些安卓系统上，会有空格
-- 例子：[hide_in_text.py](clockware/hide_in_text.py)
+- 例子：[hide_in_txt.py](example/example_hide_in_txt.py)
+
+```python
+from hide_info import hide_in_txt
+
+# 把一个文件隐藏在一段已有的文本中
+hide_in_txt.file_encode(filename='要隐藏的文件2.zip', text_filename='一段文本.txt', text_filename_new='藏物于文.txt')
+# 从文本中提取文件
+hide_in_txt.file_decode(filename='藏物于文-解出的文件.zip', text_filename='藏物于文.txt')
+```
 
 ## hide_as_txt: 化物为文
 
@@ -98,7 +144,16 @@ pip install HideInfo
 
 说明
 - 使用的是 base85 算法
+- 例子：[hide_as_txt.py](example/example_hide_as_txt.py)
 
+```python
+from hide_info import hide_as_txt
+
+# 把一个文件转化为一段文本，并存下走
+hide_as_txt.file_encode(filename='要隐藏的文件.zip', txt_filename='化物为文.txt')
+# 从文本中提取文件
+hide_as_txt.file_decode(filename='化物为文-解出的文件.zip', txt_filename='化物为文.txt')
+```
 
 ## 其他算法
 

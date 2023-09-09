@@ -9,8 +9,9 @@ text_encode = hide_in_music.decode(music_filename="藏文于音.wav")
 print(text_encode.decode('utf-8'))
 
 # %%
+# 把文件隐藏到某个音乐中
 hide_in_music.file_encode(filename='要隐藏的文件.zip', music_filename="音乐.wav", music_filename_new="藏物于音.wav")
-
+# 从音乐中提取文件
 hide_in_music.file_decode(filename="藏物于音-解出的文件.zip", music_filename="藏物于音.wav")
 
 # %% 要隐藏的文件和解出的文件一模一样

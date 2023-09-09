@@ -7,9 +7,10 @@ text_new = hide_in_txt.encode(bytes_data, text)
 text_extract = hide_in_txt.decode(text_new)
 print(text_extract.decode('utf-8'))
 
-# %%把一个文件隐藏到文本中
+# %%
+# 把一个文件隐藏在一段已有的文本中
 hide_in_txt.file_encode(filename='要隐藏的文件2.zip', text_filename='一段文本.txt', text_filename_new='藏物于文.txt')
-
+# 从文本中提取文件
 hide_in_txt.file_decode(filename='藏物于文-解出的文件.zip', text_filename='藏物于文.txt')
 
 # 验证一致
