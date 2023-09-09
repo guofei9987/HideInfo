@@ -20,12 +20,13 @@ jobs:
       - name: Run tests
         run: |
           python setup.py install
-          python example/example_hide_as_img.py
-          python example/example_hide_in_img.py
-          python example/example_img_exif.py
-          python example/example_hide_as_music.py
-          python example/example_hide_in_music.py
-          python example/example_img_seed.py
-          python example/example_hide_as_txt.py
-          python example/example_hide_in_txt.py
-          python example/example_mirage_tank.py
+          cd example
+          python example_hide_as_img.py
+          python example_hide_in_img.py
+          python example_img_exif.py
+          python example_hide_as_music.py
+          python example_hide_in_music.py
+          python example_img_seed.py
+          python example_hide_as_txt.py
+          python example_hide_in_txt.py
+          python example_mirage_tank.py
