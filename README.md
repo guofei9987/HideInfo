@@ -3,6 +3,19 @@
 Info Hiding Library  
 一些主流（但是原理简单）的信息隐藏方法  
 
+
+
+[![PyPI](https://img.shields.io/pypi/v/HideInfo)](https://pypi.org/project/HideInfo/)
+[![License](https://img.shields.io/pypi/l/HideInfo.svg)](https://github.com/guofei9987/HideInfo/blob/master/LICENSE)
+![Python](https://img.shields.io/badge/python->=3.5-green.svg)
+![Platform](https://img.shields.io/badge/platform-windows%20|%20linux%20|%20macos-green.svg)
+[![stars](https://img.shields.io/github/stars/guofei9987/HideInfo.svg?style=social)](https://github.com/guofei9987/HideInfo/)
+[![fork](https://img.shields.io/github/forks/guofei9987/HideInfo?style=social)](https://github.com/guofei9987/HideInfo/fork)
+[![Downloads](https://pepy.tech/badge/HideInfo)](https://pepy.tech/project/HideInfo)
+
+
+
+
 | 算法   | 说明                |
 |------|-------------------|
 | 幻影坦克 | 使图片在不同的背景下显示不同的图片 |
