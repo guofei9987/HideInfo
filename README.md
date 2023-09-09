@@ -1,7 +1,7 @@
 # HideInfo
 
 Info Hiding Library  
-一些主流（但是原理简单）的信息隐藏方法  
+一些原理简洁的信息隐藏方法  
 
 
 
