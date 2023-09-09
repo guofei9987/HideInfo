@@ -10,10 +10,10 @@ print(text_extract.decode('utf-8'))
 # %%把一个文件隐藏到文本中
 hide_in_txt.file_encode(filename='要隐藏的文件2.zip', text_filename='一段文本.txt', text_filename_new='藏物于文.txt')
 
-hide_in_txt.file_decode(filename='解出的文件.zip', text_filename='藏物于文.txt')
+hide_in_txt.file_decode(filename='藏物于文-解出的文件.zip', text_filename='藏物于文.txt')
 
 # 验证一致
 import hashlib
 
-with open('要隐藏的文件2.zip', 'rb') as f1, open("解出的文件.zip", 'rb') as f2:
+with open('要隐藏的文件2.zip', 'rb') as f1, open("藏物于文-解出的文件.zip", 'rb') as f2:
     assert hashlib.md5(f1.read()).hexdigest() == hashlib.md5(f2.read()).hexdigest()

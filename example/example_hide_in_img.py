@@ -18,5 +18,5 @@ text_encode = hide_in_img.file_decode('藏物于图-解出的文件.zip', img_fi
 # 要隐藏的文件和解出的文件一模一样
 import hashlib
 
-with open('要隐藏的文件.zip', 'rb') as f1, open('lsb解出的文件.zip', 'rb') as f2:
+with open('要隐藏的文件.zip', 'rb') as f1, open('藏物于图-解出的文件.zip', 'rb') as f2:
     assert hashlib.md5(f1.read()).hexdigest() == hashlib.md5(f2.read()).hexdigest()

@@ -17,5 +17,5 @@ hide_as_music.file_decode(filename='化物为音-解出来的文件.zip', wav_fi
 # 要隐藏的文件和解出的文件一模一样
 import hashlib
 
-with open('要隐藏的文件2.zip', 'rb') as f1, open('解出来的文件.zip', 'rb') as f2:
+with open('要隐藏的文件2.zip', 'rb') as f1, open('化物为音-解出来的文件.zip', 'rb') as f2:
     assert hashlib.md5(f1.read()).hexdigest() == hashlib.md5(f2.read()).hexdigest()
