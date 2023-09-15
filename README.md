@@ -62,7 +62,7 @@ from hide_info import hide_as_img
 
 # 文件转为图片并存下来
 hide_as_img.file_encode(filename='要隐藏的文件.zip', img_filename='化物为图.png')
-# 把图片再转会文件
+# 把图片再转回文件
 hide_as_img.file_decode(filename='化物为图-解出来的文件.zip', img_filename='化物为图.png')
 ```
 
