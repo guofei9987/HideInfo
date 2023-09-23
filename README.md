@@ -18,15 +18,16 @@ Info Hiding Library
 
 | 算法   | 说明                |
 |------|-------------------|
-| 幻影坦克 | 使图片在不同的背景下显示不同的图片 |
-| 化物为图 | 把数据以图片形式存放        |
-| 藏物于图 | 把数据藏在图片中          |
-| 图种   | 把图片和文件黏在一起，并存为图片  |
-| EXIF | 把一段信息放到图片的EXIF中   |
-| 藏物于音 | 把数据隐藏在音频文件中       |
-| 化物为音 | 把数据以音频的形式存放       |
-| 藏物于文 | 把数据隐藏在文本中 |
-| 化物为文 | 把数据以文本文件的形式存放 |
+| [幻影坦克](https://github.com/guofei9987/HideInfo/blob/main/example/example_mirage_tank.py) | 使图片在不同的背景下显示不同的图片 |
+| [化物为图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_img.py) | 把数据以图片形式存放        |
+| [藏物于图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_img.py) | 把数据藏在一个图片中          |
+| [图种](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_seed.py)   | 把图片和文件黏在一起，并存为图片  |
+| [EXIF](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_exif.py) | 把一段信息放到图片的EXIF中   |
+| [化物为音](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_music.py) | 把数据以音频的形式存放       |
+| [藏物于音](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_music.py) | 把数据隐藏在一个音频中       |
+| [化物为文](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_txt.py) | 把数据以文本文件的形式存放 |
+| [藏物于文](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_txt.py) | 把数据隐藏在一段文本中 |
+
 
 
 安装
@@ -45,11 +46,20 @@ pip install HideInfo
 - 未来：支持彩色图片
 - 例子：[example/example_mirage_tank.py](example/example_mirage_tank.py)
 
+```python
+from hide_info import mirage_tank
 
-## hide_as_img:转物为图
+mirage_tank.mirage_tank('图片.png', 'img2.jpeg', '幻影坦克.png')
+```
 
-功能：文件/文本/bytes 类数据，转换为图片  
+## hide_as_img:化物为图
+
+功能：文件/文本/字节 类数据，转换为图片  
 原理：图片1个通道上的1个像素，可以存放 0-255 的数字，也就是一个字节。因此可以用来存放数据。
+使用场景：
+    - 信息隐藏
+    - 在只能发送图片的场景下（如某社交软件），发送任意文件
+
 
 说明
 - RGB 3个通道都用来存放数据
@@ -69,9 +79,14 @@ hide_as_img.file_decode(filename='化物为图-解出来的文件.zip', img_file
 ## hide_in_img：藏物于图
 
 功能：文件/文本/bytes 类数据，藏进一个 PNG 图片中，并且用肉眼无法看出区别
+原理：（LSB算法）根据信息的二进制，改变像素数据的最低位，肉眼是无法察觉这种改变
+使用场景：
+    - 信息隐藏、隐蔽传输
+    - 在只能发送图片的场景下（例如某社交软件），发送任意信息
+    - 盲水印、图片溯源、版权保护
+
 
 说明
-- 使用 LSB 算法
 - 解原始数据时，无需原图参与，只看最低位
 - 使用前4个字节存放数据的大小
 - 使用位运算，提高一定的性能
@@ -96,7 +111,7 @@ text_encode = hide_in_img.file_decode('藏物于图-解出的文件.zip', img_fi
 
 ## img_exif:把信息隐藏在图片的EXIF中
 
-功能：把图片和文件连接起来，以图片的形式存下来（目前还不完善）
+功能：把信息隐藏在图片的 EXIF 中，从而获得隐蔽信息、传输隐蔽信息的能力
 
 - 例子：[example/example_img_exif.py](example/example_img_exif.py)
 
@@ -116,12 +131,16 @@ hide_in_music.file_encode(filename='要隐藏的文件.zip', music_filename="音
 hide_in_music.file_decode(filename="藏物于音-解出的文件.zip", music_filename="藏物于音.wav")
 ```
 
-## hide_as_music：转物为音
+## hide_as_music：化物为音
 
 功能：把一段信息（文件/文本/bytes），转为声音
+原理：用 16 种音可以表示一个四进制。如果每个音持续 0.05 秒，那么每秒声音可以存放 10 字节
+使用场景：
+    - 信息隐藏、隐蔽传输
+    - 在只能发送图片的场景下（例如某社交软件），发送任意信息
+    
 
 说明
-- 用 16 种音表示四进制。每个音持续 0.05 秒，因此每秒对应 10 字节。
 - 例子：[hide_as_music.py](example/example_hide_as_music.py)
 
 ```python
