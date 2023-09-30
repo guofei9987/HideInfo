@@ -51,7 +51,7 @@ def mirage_tank(img_filename1: str, img_filename2: str, output_img_filename: str
     # 计算 alpha 通道
     A_gray = cv2.cvtColor(A, cv2.COLOR_BGR2GRAY)
     B_gray = cv2.cvtColor(B, cv2.COLOR_BGR2GRAY)
-    B_gray = a * B_gray / 2 + b  # 适当调暗图片B
+    B_gray = a * B_gray + b  # 适当调暗图片B
     alpha = 255 - A_gray.astype('int') + B_gray.astype('int')
     alpha = np.clip(alpha, 1, 255).reshape(height, width, 1)
 
