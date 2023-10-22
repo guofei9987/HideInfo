@@ -21,6 +21,7 @@ Info Hiding Library
 | [幻影坦克](https://github.com/guofei9987/HideInfo/blob/main/example/example_mirage_tank.py) | 使图片在不同的背景下显示不同的图片 |
 | [化物为图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_img.py) | 把数据以图片形式存放        |
 | [藏物于图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_img.py) | 把数据藏在一个图片中          |
+| [图片隐水印](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_watermark.py) | 图片空域上的隐水印 |
 | [图种](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_seed.py)   | 把图片和文件黏在一起，并存为图片  |
 | [EXIF](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_exif.py) | 把一段信息放到图片的EXIF中   |
 | [化物为音](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_music.py) | 把数据以音频的形式存放       |
@@ -102,6 +103,25 @@ hide_in_img.file_encode(filename='要隐藏的文件.zip', img_filename='图片.
 text_encode = hide_in_img.file_decode('藏物于图-解出的文件.zip', img_filename='藏物于图.png')
 ```
 
+## img_watermark: 图片空域上的隐水印
+
+说明：
+- 同样使用 LSB 算法。 
+- 水印是一个 **二值图**。
+- 可对抗裁剪攻击
+- 如果图片有大片纯色区域，对这些攻击有一定的鲁棒性：缩放、转格式、截图、裁剪。如果没有大片纯色区域，则不能对抗这些攻击。
+- 例子：[example/example_img_watermark.py](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_watermark.py)
+
+代码 
+```python
+from hide_info import img_watermark
+
+# 嵌入隐式水印
+img_watermark.file_encode(img_filename="图片.png", watermark_filename="watermark.png", img_filename_new="图片_打入水印.png")
+
+# 提取隐式水印
+img_watermark.file_decode(img_filename="图片_打入水印.png", wm_extract="解出的水印.png")
+```
 
 ## img_seed:图种
 
