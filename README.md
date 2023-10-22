@@ -30,6 +30,7 @@ Info Hiding Library
 
 
 
+
 安装
 ```
 pip install HideInfo
