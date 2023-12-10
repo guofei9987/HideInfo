@@ -1,12 +1,12 @@
 # 回声音频水印
 import numpy as np
 from scipy.io import wavfile
-from scipy.signal import windows
-from numpy.fft import ifft
+from scipy.signal.windows import hann
+from numpy.fft import ifft, fft
 
 
 class EchoWatermark:
-    def __init__(self, pwd, algo_type=2, verbose=False):
+    def __init__(self, pwd, algo_type=3, verbose=False):
         self.pwd = pwd
         self.algo_type = algo_type
         self.verbose = verbose
@@ -71,25 +71,21 @@ class EchoWatermark:
 
             delay = delay_matrix[secret_key_extended[i]][wm_repeat[i]]
 
-            echo_positive = echo_amplitude \
-                            * np.concatenate(
-                (np.zeros(delay), frame[0:frame_len - delay]))
+            echo_positive = np.concatenate((np.zeros(delay), frame[0:frame_len - delay]))
 
-            echo_negative = - echo_amplitude \
-                            * np.concatenate((np.zeros(delay + neg_delay),
+            echo_negative = - np.concatenate((np.zeros(delay + neg_delay),
                                               frame[0:frame_len - delay - neg_delay]))
 
-            echo_forward = echo_amplitude \
-                           * np.concatenate((frame[delay:frame_len], np.zeros(delay)))
+            echo_forward = np.concatenate((frame[delay:frame_len], np.zeros(delay)))
 
             if self.algo_type == 1:
-                echoed_frame = frame + echo_positive
+                echoed_frame = frame + echo_amplitude * echo_positive
             elif self.algo_type == 2:
-                echoed_frame = frame + echo_positive + echo_negative
+                echoed_frame = frame + echo_amplitude * (echo_positive + echo_negative)
             else:  # algo_type == 3
-                echoed_frame = frame + echo_positive + echo_forward
+                echoed_frame = frame + echo_amplitude * (echo_positive + echo_forward)
 
-            echoed_frame = echoed_frame * windows.hann(frame_len)
+            echoed_frame = echoed_frame * hann(frame_len)
             echoed_signal[frame_shift * i: frame_shift * (i + 1)] = \
                 np.concatenate((prev1[frame_shift:frame_len] +
                                 echoed_frame[0:overlap_length],
@@ -99,7 +95,7 @@ class EchoWatermark:
             pointer += frame_shift
 
         echoed_signal = np.concatenate((echoed_signal, ori_signal[len(echoed_signal):])).astype(np.int16)
-        # 将保存为wav格式
+        # 保存为wav格式
         wavfile.write(embed_filename, sr, echoed_signal)
 
     def extract(self, embed_filename, len_wm_bits):
@@ -136,7 +132,7 @@ class EchoWatermark:
         for i in range(embed_nbit):
             wmarked_frame1 = wm_signal[pointer: pointer + frame_len]
             ceps1 = ifft(
-                np.log(np.square(np.fft.fft(wmarked_frame1)) + log_floor)).real
+                np.log(np.square(fft(wmarked_frame1)) + log_floor)).real
 
             if secret_key[i] == 1:
                 delay0, delay1 = delay10, delay11
@@ -161,7 +157,7 @@ class EchoWatermark:
 
         for i in range(len_wm_bits):
             # 汇总比特值（按平均值）
-            ave = np.sum(detected_bit1[count:count + n_repeat]) / n_repeat
+            ave = np.average(detected_bit1[count:count + n_repeat])
             if ave >= 0.5:
                 wm_extract[i] = 1
             else:
