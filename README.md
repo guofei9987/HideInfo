@@ -174,6 +174,34 @@ hide_as_music.file_decode(filename='化物为音-解出来的文件.zip', wav_fi
 
 ```
 
+## echo_watermark: 回声水印
+
+```python
+from hide_info.echo_watermark import EchoWatermark, get_error_rate
+from hide_info import utils
+
+ori_file = "sounds.wav"  # 载体
+embedded_file = "sounds_with_watermark.wav"  # 嵌入水印后的文件名
+wm_str = "回声水印算法，欢迎 star!"  # 水印
+
+wm_bits = utils.bytes2bin(wm_str.encode('utf-8'))
+len_wm_bits = len(wm_bits)
+
+# 嵌入水印
+echo_wm = EchoWatermark(pwd=111001)
+echo_wm.embed(origin_filename=ori_file, wm_bits=wm_bits, embed_filename=embedded_file)
+
+# 提取水印
+echo_wm = EchoWatermark(pwd=111001)
+wm_extract = echo_wm.extract(embed_filename=embedded_file, len_wm_bits=len_wm_bits)
+
+wm_str_extract = utils.bin2bytes(wm_extract).decode('utf-8', errors='replace')
+print("解出水印：", wm_str_extract)
+# 错误率：
+get_error_rate(wm_extract, wm_bits)
+```
+
+
 ## hide_in_text：藏物于文
 
 功能：把一段信息（文件/文本/bytes），藏进一段文本中
