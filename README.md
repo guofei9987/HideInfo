@@ -16,18 +16,19 @@ Info Hiding Library
 
 
 
-| 算法   | 说明                |
-|------|-------------------|
-| [幻影坦克](https://github.com/guofei9987/HideInfo/blob/main/example/example_mirage_tank.py) | 使图片在不同的背景下显示不同的图片 |
-| [化物为图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_img.py) | 把数据以图片形式存放        |
-| [藏物于图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_img.py) | 把数据藏在一个图片中          |
-| [图片隐水印](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_watermark.py) | 图片空域上的隐水印 |
-| [图种](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_seed.py)   | 把图片和文件黏在一起，并存为图片  |
-| [EXIF](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_exif.py) | 把一段信息放到图片的EXIF中   |
-| [化物为音](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_music.py) | 把数据以音频的形式存放       |
-| [藏物于音](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_music.py) | 把数据隐藏在一个音频中       |
-| [化物为文](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_txt.py) | 把数据以文本文件的形式存放 |
-| [藏物于文](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_txt.py) | 把数据隐藏在一段文本中 |
+| 算法                                                                                         | 说明                |
+|--------------------------------------------------------------------------------------------|-------------------|
+| [幻影坦克](https://github.com/guofei9987/HideInfo/blob/main/example/example_mirage_tank.py)    | 使图片在不同的背景下显示不同的图片 |
+| [化物为图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_img.py)    | 把数据以图片形式存放        |
+| [藏物于图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_img.py)    | 把数据藏在一个图片中        |
+| [图片隐水印](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_watermark.py) | 图片空域上的隐水印         |
+| [图种](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_seed.py)         | 把图片和文件黏在一起，并存为图片  |
+| [EXIF](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_exif.py)       | 把一段信息放到图片的EXIF中   |
+| [化物为音](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_music.py)  | 把数据以音频的形式存放       |
+| [藏物于音](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_music.py)  | 把数据隐藏在一个音频中       |
+| [回声水印](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_music.py)  | 以回声的形式，把二进制嵌入到音频中 |
+| [化物为文](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_txt.py)    | 把数据以文本文件的形式存放     |
+| [藏物于文](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_txt.py)    | 把数据隐藏在一段文本中       |
 
 
 
@@ -172,6 +173,42 @@ hide_as_music.file_encode(filename='要隐藏的文件2.zip', wav_filename='化�
 hide_as_music.file_decode(filename='化物为音-解出来的文件.zip', wav_filename='化物为音.wav')
 
 ```
+
+## echo_watermark: 回声水印
+
+回声水印（Echo Watermarking）是一种音频水印技术，通过在原始音频信号中添加回声来嵌入信息。这种技术利用了人耳的心理声学特性，即人耳对于短时间内的回声延迟是不敏感的，因此可以将信息隐藏在音频信号的回声中而不影响听感。
+
+回声水印的实现通常有两个重要参数：回声延迟和回声幅度。延迟时间决定了回声在原始信号之后多久发生，而幅度则影响回声的强度。通过巧妙地调节这两个参数，可以将数字信息（如比特流）编码到音频信号中。
+
+例如，可以用短的延迟时间表示比特'0'，用长的延迟时间表示比特'1'，或者通过调整回声的幅度来表示不同的数据位。
+
+回声水印技术对于音质的影响相对较小，同时具有较好的鲁棒性，能够在一定程度上抵抗压缩、转换等处理过程。这使得它适用于版权保护、内容认证、隐秘通讯等领域。
+
+```python
+from hide_info.echo_watermark import EchoWatermark, get_error_rate
+from hide_info import utils
+
+ori_file = "sounds.wav"  # 载体
+embedded_file = "sounds_with_watermark.wav"  # 嵌入水印后的文件名
+wm_str = "回声水印算法，欢迎 star!"  # 水印
+
+wm_bits = utils.bytes2bin(wm_str.encode('utf-8'))
+len_wm_bits = len(wm_bits)
+
+# 嵌入水印
+echo_wm = EchoWatermark(pwd=111001)
+echo_wm.embed(origin_filename=ori_file, wm_bits=wm_bits, embed_filename=embedded_file)
+
+# 提取水印
+echo_wm = EchoWatermark(pwd=111001)
+wm_extract = echo_wm.extract(embed_filename=embedded_file, len_wm_bits=len_wm_bits)
+
+wm_str_extract = utils.bin2bytes(wm_extract).decode('utf-8', errors='replace')
+print("解出水印：", wm_str_extract)
+# 错误率：
+get_error_rate(wm_extract, wm_bits)
+```
+
 
 ## hide_in_text：藏物于文
 

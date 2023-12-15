@@ -2,12 +2,13 @@ import numpy as np
 from hide_info.echo_watermark import EchoWatermark, get_error_rate, get_snr
 from hide_info import utils
 
-ori_file = "sounds.wav"
-embedded_file = "sounds_with_watermark.wav"
-wm_str = "回声水印算法，欢迎 star!"
+
+ori_file = "sounds.wav"  # 载体
+embedded_file = "sounds_with_watermark.wav"  # 嵌入水印后的文件名
+wm_str = "回声水印算法，欢迎 star!"  # 水印
+
 
 wm_bits = utils.bytes2bin(wm_str.encode('utf-8'))
-
 len_wm_bits = len(wm_bits)
 
 # embed:
@@ -20,6 +21,7 @@ wm_extract = echo_wm.extract(embed_filename=embedded_file, len_wm_bits=len_wm_bi
 
 wm_str_extract = utils.bin2bytes(wm_extract).decode('utf-8', errors='replace')
 print("解出水印：", wm_str_extract)
+# 错误率：
 get_error_rate(wm_extract, wm_bits)
 
 # %% There are 3 algorithms：
