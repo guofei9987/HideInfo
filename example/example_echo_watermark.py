@@ -2,9 +2,11 @@ import numpy as np
 from hide_info.echo_watermark import EchoWatermark, get_error_rate, get_snr
 from hide_info import utils
 
+
 ori_file = "sounds.wav"  # 载体
 embedded_file = "sounds_with_watermark.wav"  # 嵌入水印后的文件名
 wm_str = "回声水印算法，欢迎 star!"  # 水印
+
 
 wm_bits = utils.bytes2bin(wm_str.encode('utf-8'))
 len_wm_bits = len(wm_bits)
