@@ -185,28 +185,29 @@ hide_as_music.file_decode(filename='化物为音-解出来的文件.zip', wav_fi
 回声水印技术对于音质的影响相对较小，同时具有较好的鲁棒性，能够在一定程度上抵抗压缩、转换等处理过程。这使得它适用于版权保护、内容认证、隐秘通讯等领域。
 
 ```python
-from hide_info.echo_watermark import EchoWatermark, get_error_rate
-from hide_info import utils
+from hide_info.echo_watermark import EchoWatermark
+from hide_info import utils, evaluate
+from scipy.io import wavfile
 
-ori_file = "sounds.wav"  # 载体
-embedded_file = "sounds_with_watermark.wav"  # 嵌入水印后的文件名
+ori_file = "./ori_file/sounds.wav"  # 载体
+embedded_file = "./output/sounds_with_watermark.wav"  # 嵌入水印后的文件名
 wm_str = "回声水印算法，欢迎 star!"  # 水印
 
 wm_bits = utils.bytes2bin(wm_str.encode('utf-8'))
 len_wm_bits = len(wm_bits)
 
-# 嵌入水印
+# embed:
 echo_wm = EchoWatermark(pwd=111001)
 echo_wm.embed(origin_filename=ori_file, wm_bits=wm_bits, embed_filename=embedded_file)
 
-# 提取水印
+# extract：
 echo_wm = EchoWatermark(pwd=111001)
 wm_extract = echo_wm.extract(embed_filename=embedded_file, len_wm_bits=len_wm_bits)
 
 wm_str_extract = utils.bin2bytes(wm_extract).decode('utf-8', errors='replace')
-print("解出水印：", wm_str_extract)
-# 错误率：
-get_error_rate(wm_extract, wm_bits)
+print("extract watermark: ", wm_str_extract)
+# error rate：
+evaluate.get_error_rate(wm_extract, wm_bits)
 ```
 
 
