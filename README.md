@@ -16,10 +16,10 @@ Info Hiding Library
 
 
 
-| 算法                                                                                         | 说明                |
-|--------------------------------------------------------------------------------------------|-------------------|
-| [幻影坦克](https://github.com/guofei9987/HideInfo/blob/main/example/example_mirage_tank.py)    | 使图片在不同的背景下显示不同的图片 |
-| [化物为图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_img.py)    | 把数据以图片形式存放        |
+| 算法                                                                                         | 说明                | 在线试用
+|--------------------------------------------------------------------------------------------|-------------------|-------------------------|
+| [幻影坦克](https://github.com/guofei9987/HideInfo/blob/main/example/example_mirage_tank.py)    | 使图片在不同的背景下显示不同的图片 | [幻影坦克](https://www.guofei.site/os/mirage_tank.html)
+| [化物为图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_as_img.py)    | 把数据以图片形式存放        | [化物为图](https://www.guofei.site/os/hide_as_img.html)
 | [藏物于图](https://github.com/guofei9987/HideInfo/blob/main/example/example_hide_in_img.py)    | 把数据藏在一个图片中        |
 | [图片隐水印](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_watermark.py) | 图片空域上的隐水印         |
 | [图种](https://github.com/guofei9987/HideInfo/blob/main/example/example_img_seed.py)         | 把图片和文件黏在一起，并存为图片  |
@@ -37,6 +37,10 @@ Info Hiding Library
 ```
 pip install HideInfo
 ```
+
+相关项目：
+- [rust版本](https://github.com/guofei9987/hide_info)
+
 
 
 ## 幻影坦克
@@ -159,11 +163,11 @@ hide_in_music.file_decode(filename="藏物于音-解出的文件.zip", music_fil
 
 ## hide_as_music：化物为音
 
-功能：把一段信息（文件/文本/bytes），转为声音
-原理：用 16 种音可以表示一个四进制。如果每个音持续 0.05 秒，那么每秒声音可以存放 10 字节
+功能：把一段信息（文件/文本/bytes），转为声音  
+原理：用 16 种音可以表示一个四进制。如果每个音持续 0.05 秒，那么每秒声音可以存放 10 字节  
 使用场景：
-    - 信息隐藏、隐蔽传输
-    - 在只能发送图片的场景下（例如某社交软件），发送任意信息
+- 信息隐藏、隐蔽传输
+- 在只能发送声音的场景下（例如某社交软件），发送任意信息
     
 
 说明
